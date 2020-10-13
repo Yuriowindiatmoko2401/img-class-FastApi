@@ -2,38 +2,43 @@ import pandas as pd
 import os
 import json
 
+def main():
+    
+    workdir = os.getcwd()
 
-workdir = os.getcwd()
-data_folder = open(workdir + '/' + "list_sku.txt", 'r')
-Lines = data_folder.readlines()
+    ls_labels = os.listdir(workdir + '/raw_data/all_labels')
 
-ls_sku = []
+    ls_labels.remove('.gitkeep')
 
-for line in Lines:
-    ls_sku.append(line.replace('\n',''))
+    ls_labels.remove('.DS_Store')
 
-json_dict = {}
-for sku in ls_sku:
-    with open(workdir + "/{sku}.json".format(sku=sku), 'r') as f:
-        json_dict[sku] = json.load(f)
+    # read n collecting all json files into dict
+    json_dict = {}
+    for label in ls_labels:
 
-df_dict = {}
-for sku in ls_sku:
-    df = pd.DataFrame(json_dict[sku])
-    df['col_name'] = df[sku]
-    df[sku] = 1
-    for ex_sku in [x for x in ls_sku if x != sku]:
-        df[ex_sku] = 0
-    df_dict[sku]=df
+        with open(workdir + "/" + "raw_data/json_file/{label}.json".format(label=label), 'r') as f:
+            json_dict[label] = json.load(f)
+
+    # read n collecting dict into dataframes
+    df_dict = {}
+    for label in ls_labels:
+        df = pd.DataFrame(json_dict[label])
+        df['col_name'] = df[label]
+        df[label] = 1
+        for ex_sku in [x for x in ls_labels if x != label]:
+            df[ex_sku] = 0
+        df_dict[label]=df
+
+    # merge all dataframes into one
+    df_baru = pd.DataFrame()
+
+    for i, label in enumerate(ls_labels):
+        df_baru = pd.concat([df_baru,df_dict[label]])
+
+    df_baru = df_baru.reset_index(drop=True)
+
+    df_baru.to_csv(workdir + "/" + "data.csv",index=False)
 
 
-df_baru = pd.DataFrame()
-
-for i, sku in enumerate(ls_sku):
-    df_baru = pd.concat([df_baru,df_dict[sku]])
-
-df_baru = df_baru.reset_index(drop=True)
-
-df_baru.to_csv("data.csv",index=False)
-
-
+if __name__ == '__main__':
+    main()

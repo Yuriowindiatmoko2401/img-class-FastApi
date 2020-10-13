@@ -1,18 +1,24 @@
 import random, sys, os, json
 
-workdir = os.getcwd()
 
-data_name = []
-file1 = open(workdir + '/' + str(sys.argv[1]), 'r')
-Lines = file1.readlines()
+def main():
+	
+	workdir = os.getcwd()
 
-for line in Lines:
-	data_name.append(line.replace('\n',''))
+	data_name = []
+	file1 = open(workdir + '/' + str(sys.argv[1]), 'r')
+	Lines = file1.readlines()
 
-name_folder = str(sys.argv[2])
+	for line in Lines:
+		data_name.append(line.replace('\n',''))
 
-mapped = {name_folder:data_name}
+	name_folder = str(sys.argv[2])
 
-with open(workdir + '/' + str(sys.argv[3]), 'w') as fp:
-    json.dump(mapped, fp)
+	mapped = {name_folder:data_name}
 
+	with open(workdir + '/' + str(sys.argv[3]), 'w') as fp:
+	    json.dump(mapped, fp)
+
+
+if __name__ == '__main__':
+	main()

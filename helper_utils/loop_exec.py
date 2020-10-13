@@ -1,23 +1,60 @@
 import os
+import glob
+
+
+def deleteFile(filename):
+
+    if os.path.exists(filename) and not os.path.isdir(filename) and not os.path.islink(filename):
+
+        os.remove(filename)
+      
 
 def main():
+
 	workdir = os.getcwd()
 
-	data_folder = open(workdir + '/' + "list_sku.txt", 'r')
-	Lines = data_folder.readlines()
+	ls_labels = os.listdir(workdir + '/raw_data/all_labels')
+	
+	ls_labels.remove('.gitkeep')
 
-	ls_sku = []
+	ls_labels.remove('.DS_Store')
 
-	for line in Lines:
-		ls_sku.append(line.replace('\n',''))
+	# renaming files inside label_folders
+	for label in ls_labels:
 
-	for sku in ls_sku:
+		os.system("python helper_utils/randomfilerenamer.py 'raw_data/all_labels/{label}'".format(label=label))
 
-		# os.system("python read_file.py '{sku}' '{sku}.txt'".format(sku=sku))
+	# read all files inside label_folders n write to .txt
+	for label in ls_labels:
+
+		os.system("python helper_utils/read_file.py 'raw_data/all_labels/{label}' 'raw_data/txt_file/{label}.txt'".format(label=label))
+
+	# mapping all files from .txt file to labels:[files] json
+	for label in ls_labels:		
+
+		os.system("python helper_utils/mapping.py 'raw_data/txt_file/{label}.txt' '{label}' 'raw_data/json_file/{label}.json'".format(label=label))
+
+	# merge all img files into one data folders
+	for label in ls_labels:
 		
-		# os.system("python mapping.py '{sku}.txt' '{sku}' '{sku}.json'".format(sku=sku))
+		os.system("cp '{workdir}/raw_data/all_labels/{label}/'* data/".format(workdir=workdir,label=label))
 
-		os.system("cp '{sku}'/* data/".format(sku=sku))
+	# create labels file csv
+	os.system("python helper_utils/merge_to_csv.py")
+
 
 if __name__ == '__main__':
 	main()
+
+
+
+
+
+
+
+
+
+
+
+
+
