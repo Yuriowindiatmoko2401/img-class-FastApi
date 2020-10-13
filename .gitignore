@@ -130,12 +130,18 @@ dmypy.json
 
 # exclude everything
 data/*
-raw_data/*
+raw_data/all_labels/*
+raw_data/json_file/*
+raw_data/txt_file/*
 
 # exception to the rule
 !data/.gitkeep 
-!raw_data/.gitkeep 
+!raw_data/all_labels/.gitkeep 
+!raw_data/json_file/.gitkeep 
+!raw_data/txt_file/.gitkeep 
 
+# ds store
+raw_data/.DS_Store
 
 
 
