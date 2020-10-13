@@ -8,25 +8,9 @@ img-class-FastApi most reference from [FastImageClassification](https://github.c
 
 - extract files there and naming each folder based on labels that you decide (it will be your labels class name)
 
-- create unique name in those folders
- 
-      python helper_utils/randomfilerenamer.py raw_data/all_labels/1_tugu_jogja 
+- create unique name for those folders
 
-- captioning image
-- read file  
-- python read_file.py <folder_image> <output_readfile>
+- execute this file to do some necessary init file (merge data and create labels data to data.csv)
 
-      python script_utils/read_file.py ../1_tugu_jogja name_file.txt
-
-- mapping anotasi
-- python mapping_anotasi.py <list_anotasi manual> <output_readfile> <output caption json>
-
-```bash
-python script_utils/mapping_anotasi.py list_anotasi.txt name_file.txt caption_tugu.json
-```
-  
-- manually crosscheck
-http://jsonviewer.stack.hu/
-
-- Finally merge all captions and image into each of it's folder
+		python helper_utils/loop_exec.py 
 
