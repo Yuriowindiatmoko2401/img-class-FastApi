@@ -143,6 +143,9 @@ raw_data/txt_file/*
 # ds store
 raw_data/.DS_Store
 
+# exclude data
+data.csv
+
 
 
 
